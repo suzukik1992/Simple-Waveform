@@ -20,12 +20,12 @@ var y_d = [];
 var z_rate = 1;
 var scale_x = 1;
 var scale_y = 1;
-var zoom_max = 500;
+var zoom_max = 3000;
 var buffer = [];
 var max = new Array(6);
-var seg = [200,250,350,400,550,750];
-var l_w = [0.029,0.023,0.015,0.010,0.007,0.004];
-var range = [smp,65000,25000,10000,5000,1000];
+var seg = [200,200,200,200,200,200];
+var l_w = [0.015,0.015,0.015,0.015,0.015,0.015];
+var range = [smp,500000,180000,30000,15000,6000];
 var bl = [];
 var line_width = l_w[0];
 var segment = seg[0];
@@ -35,8 +35,9 @@ var segment = seg[0];
 for(var i=0;i<seg.length;i++){
     bl[i] = Math.ceil(range[i]/seg[i]);
     max[i] = new Array(Math.round(smp/bl[i]));
+    var p = 25-4*i
     for(var j=0;j<smp/bl[i];j++){
-        for(var l=bl[i]*j;l<bl[i]*j+bl[i];l++){
+        for(var l=bl[i]*j;l<bl[i]*j+bl[i];l=l+p){
             buffer.push(buf.peek(1,l,1));
         }
         max[i][j] = Math.max.apply(null,buffer);
@@ -63,7 +64,7 @@ function paint(){
     mgraphics.scale(scale_x,scale_y);
     for(var i=0; i<segment; i++){
         var ind = i*((dis_1+dis_2)/segment)+pos[0]-dis_1;
-        y = Math.abs(r_diff(ind));
+        y = Math.abs(r_diff(ind))*amp;
         mgraphics.move_to(-1*aspect+i*2*aspect/segment, y);
         mgraphics.line_to(-1*aspect+i*2*aspect/segment, -y);
 	}
